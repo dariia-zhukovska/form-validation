@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="" class="form" id="form">
+
+    <label for="name"><input name="Name" type="text" placeholder="Имя*" data-validate-field="name" id="name"
+        class="form__input form-control"></label>
+    <label for="tel"><input name="tel" type="tel" placeholder="Телефон*" data-validate-field="tel"
+        data-validate-rules="phone" id="tel" class="form__input form-control"></label>
+    <label for="email"><input name="email" type="email" placeholder="Email*" data-validate-field="mail" id="email"
+        class="form__input form-control"></label>
+
+    <button class="btn btn-primary" id="submit-btn">Заказать</button>
+  </form>
+
+
+  <script src="./inputmask.min.js"></script>
+  <script>
+    var selector = document.querySelector("input[type='tel']");
+    var im = new Inputmask("+38 (999)-99-999-99");
+
+    im.mask(selector);
+
+    const validate = new window.JustValidate('#form');
+    const validation = new JustValidate('#form');
+    validation
+      .addField('#name', [
+        {
+          rule: 'minLength',
+          value: 3,
+        },
+        {
+          rule: 'maxLength',
+          value: 30,
+        },
+        {
+          rule: 'required',
+          errorMessage: 'Вы не ввели имя',
+        },
+      ])
+      .addField('#tel', [
+        {
+          rule: 'required',
+          errorMessage: 'Вы не ввели телефон',
+          function: (name, value) => {
+            const phone = selector.inputmask.unmaskedvalue()
+            return Number(phone) && phone.length === 10
+          }
+        },
+      ])
+      .addField('#email', [
+        {
+          rule: 'required',
+          errorMessage: 'Вы не ввели e-mail',
+        },
+        {
+          rule: 'email',
+          errorMessage: 'Неправильный e-mail',
+        },
+      ]);
+
+    // new JustValidate('.form', {
+    //   rules: {
+    //     name: {
+    //       required: true,
+    //       minLength: 2,
+    //       maxLength: 10
+    //     },
+    //     tel: {
+    //       required: true,
+    //       function: (name, value) => {
+    //         const phone = selector.inputmask.unmaskedvalue()
+    //         return Number(phone) && phone.length === 10
+    //       }
+    //     },
+    //     mail: {
+    //       required: true,
+    //       email: true
+    //     },
+    //   },
+    // });
+  </script>
+</body>
+
+</html>
